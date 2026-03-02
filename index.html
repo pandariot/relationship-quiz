@@ -351,32 +351,32 @@ const QUESTIONS = [
   {
     id: 1,
     question: "Someone offers your partner $3 million, but they have to live with their most toxic ex for 3 years first. Are they taking the deal?",
-    options: ["Absolutely, we'd survive it", "They'd seriously consider it", "No chance — they wouldn't risk us", "They don't have a toxic ex (sure)"],
+    options: ["Absolutely, we'd survive it", "They'd seriously consider it", "No chance, they wouldn't risk us", "They don't have a toxic ex (sure)"],
   },
   {
     id: 2,
-    question: "If you could read through your partner's entire text history right now without them knowing — do you think you'd find something that starts a fight?",
+    question: "If you could read through your partner's entire text history right now without them knowing, do you think you'd find something that starts a fight?",
     options: ["No, they're an open book", "Maybe something mildly annoying", "There's definitely a conversation I wouldn't love", "I'd rather not find out"],
   },
   {
     id: 3,
-    question: "Zombie apocalypse. Honestly — is your partner an asset or a liability?",
+    question: "Zombie apocalypse. Honestly, is your partner an asset or a liability?",
     options: ["Full asset. I'd be dead without them.", "Asset, but I'm carrying the team", "Liability, but a lovable one", "I'm not sure we'd stick together"],
   },
   {
     id: 4,
-    question: "If your partner disappeared under mysterious circumstances and was presumed dead, how long before they'd download a dating app?",
-    options: ["At least a year. They'd be wrecked.", "6 months — grieving but moving on", "3 months tops", "The apps are already on their phone"],
+    question: "If you disappeared under mysterious circumstances and were presumed dead, how long before your partner would download a dating app?",
+    options: ["At least a year. They'd be wrecked.", "6 months, grieving but moving on", "3 months tops", "The apps are already on their phone"],
   },
   {
     id: 5,
-    question: "A scientifically perfect algorithm says it's found your actual, 100% compatible soulmate — and it's not your partner. What do you do?",
+    question: "A scientifically perfect algorithm says it's found your actual, 100% compatible soulmate, and it's not your partner. What do you do?",
     options: ["Ignore it completely, I chose who I chose", "Be curious but never act on it", "Look them up, just to see", "Start questioning everything"],
   },
   {
     id: 6,
     question: "Your partner wins $100 million in the lottery tomorrow. How much do they give you?",
-    options: ["All of it — what's theirs is ours", "A generous split, but they keep more", "They'd 'handle the finances' suspiciously", "I'd have to ask for it"],
+    options: ["All of it, what's theirs is ours", "A generous split, but they keep more", "They'd 'handle the finances' suspiciously", "I'd have to ask for it"],
   },
   {
     id: 7,
@@ -386,11 +386,11 @@ const QUESTIONS = [
   {
     id: 8,
     question: "Who in this relationship is more likely to be the one that got away for someone else?",
-    options: ["Me, honestly", "My partner", "Both of us — we're both catches", "Neither. Let's be real."],
+    options: ["Me, honestly", "My partner", "Both of us, we're both catches", "Neither. Let's be real."],
   },
   {
     id: 9,
-    question: "If your partner could go back in time and meet you earlier — like 5 years earlier — would they have been into you?",
+    question: "If your partner could go back in time and meet you 5 years earlier, would they have been into you?",
     options: ["100%. We'd have worked at any age.", "Probably not, we were different people", "They would've liked me, I might not have liked them", "We'd have been a disaster"],
   },
   {
@@ -420,7 +420,7 @@ const QUESTIONS = [
   },
   {
     id: 15,
-    question: "Last one. Right now, at this exact moment — does your partner think this relationship is forever?",
+    question: "Last one. Right now, at this exact moment. Does your partner think this relationship is forever?",
     options: ["Yes. Absolutely. No doubt.", "Probably, but they've got a small voice of doubt", "I think they hope so but aren't sure", "I honestly don't know"],
   },
 ];
@@ -468,7 +468,7 @@ function getPartnerAnswersFromURL() {
 function getVerdict(matchCount, total) {
   const pct = (matchCount / total) * 100;
   if (pct >= 80) return { label: "PASSED", desc: "You two are disturbingly aligned. Either you're soulmates or you're the same person.", color: "#22c55e" };
-  if (pct >= 60) return { label: "BARELY PASSED", desc: "Close enough. You're in the same relationship — just reading slightly different chapters of it.", color: "#eab308" };
+  if (pct >= 60) return { label: "BARELY PASSED", desc: "Close enough. You're in the same relationship, just reading slightly different chapters of it.", color: "#eab308" };
   if (pct >= 40) return { label: "CONCERNING", desc: "You're not in the same relationship. You're in two different relationships that happen to share a bed.", color: "#f97316" };
   return { label: "DIVORCED", desc: "3,001. The gap between your answers is the gap between your realities. Maybe sit down and talk tonight.", color: "#ef4444" };
 }
@@ -504,7 +504,7 @@ function render() {
         <p class="subtitle">Both of you answer. Neither of you peek.<br>See if you're even in the same relationship.</p>
         <button class="btn-accent" onclick="startQuizA()">I'll go first</button>
         <div style="height:8px"></div>
-        <button class="btn-outline" onclick="goHome()">My partner already went — where's the link?</button>
+        <button class="btn-outline" onclick="goHome()">My partner already went. Where's the link?</button>
       </div>
     `;
   }
