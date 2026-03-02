@@ -450,10 +450,12 @@ function decodeAnswers(code) {
   } catch (e) { return null; }
 }
 
+// SET THIS to the BuzzFeed article URL where the quiz is embedded
+const SHARE_BASE_URL = 'https://www.buzzfeed.com/peggy/relationship-quiz';
+
 function getShareURL(answers) {
   const code = encodeAnswers(answers);
-  const base = window.location.origin + window.location.pathname;
-  return base + '?p=' + code;
+  return SHARE_BASE_URL + '?p=' + code;
 }
 
 function getPartnerAnswersFromURL() {
@@ -686,6 +688,19 @@ function resetQuiz() {
 
 // --- Init ---
 render();
+
+// --- Iframe resize messaging ---
+function postHeight() {
+  const height = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'resize', height: height }, '*');
+}
+// Post height after every render and on load
+const _origRender = render;
+render = function() { _origRender(); requestAnimationFrame(() => setTimeout(postHeight, 50)); };
+window.addEventListener('load', () => setTimeout(postHeight, 100));
+new ResizeObserver(() => postHeight()).observe(document.body);
+render();
+
 </script>
 </body>
 </html>
