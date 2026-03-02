@@ -280,51 +280,6 @@
     margin-left: auto;
     margin-right: auto;
   }
-  .result-card {
-    text-align: left;
-    margin-bottom: 16px;
-    padding: 16px;
-    background: var(--card);
-    border-radius: 8px;
-    border-left: 3px solid var(--accent);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.3s ease;
-  }
-  .result-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .result-card.matched { border-left-color: #22c55e; }
-  .result-q {
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .result-answers {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-  }
-  .result-label {
-    color: var(--muted);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .result-status {
-    font-size: 11px;
-    font-family: 'DM Sans', sans-serif;
-    margin-top: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
-  .result-status.match { color: #22c55e; }
-  .result-status.mismatch { color: var(--accent); }
-
   .error-text {
     color: var(--accent);
     font-size: 14px;
@@ -556,20 +511,13 @@ function render() {
     QUESTIONS.forEach(q => { if (my[q.id] === theirs[q.id]) matchCount++; });
     const v = getVerdict(matchCount, QUESTIONS.length);
 
-    let cards = '';
-    QUESTIONS.forEach((q, i) => {
-      const matched = my[q.id] === theirs[q.id];
-      cards += `
-        <div class="result-card ${matched ? 'matched' : ''}" data-index="${i}">
-          <div class="result-q">Q${i+1}: ${q.question}</div>
-          <div class="result-answers">
-            <div><span class="result-label">Partner A: </span>${q.options[theirs[q.id]]}</div>
-            <div style="text-align:right"><span class="result-label">Partner B: </span>${q.options[my[q.id]]}</div>
-          </div>
-          <div class="result-status ${matched ? 'match' : 'mismatch'}">${matched ? '✓ Same page' : '✗ Different realities'}</div>
-        </div>
-      `;
-    });
+    const shareText = matchCount >= 12
+      ? `We got ${matchCount}/15 on the divorce quiz. PASSED.`
+      : matchCount >= 9
+      ? `We got ${matchCount}/15 on the divorce quiz. BARELY PASSED.`
+      : matchCount >= 6
+      ? `We got ${matchCount}/15 on the divorce quiz. It said CONCERNING.`
+      : `We got ${matchCount}/15 on the divorce quiz. We did not pass.`;
 
     html = `
       <div class="screen visible">
@@ -577,9 +525,9 @@ function render() {
         <p class="label-upper">Questions you saw the same way</p>
         <div class="verdict-label" style="color:${v.color}">${v.label}</div>
         <p class="verdict-desc">${v.desc}</p>
-        <div id="result-cards">${cards}</div>
-        <div style="height:24px"></div>
-        <button class="btn-outline" onclick="resetQuiz()">Take it again</button>
+        <button class="btn-accent" onclick="shareResults('${encodeURIComponent(shareText)}')">Share your results</button>
+        <div style="height:8px"></div>
+        <button class="btn-ghost" onclick="startQuizA()">Think it's wrong? Take it again.</button>
       </div>
     `;
   }
@@ -597,14 +545,6 @@ function render() {
   }
 
   app.innerHTML = html;
-
-  // Animate result cards
-  if (s.screen === 'results') {
-    const cards = document.querySelectorAll('.result-card');
-    cards.forEach((card, i) => {
-      setTimeout(() => card.classList.add('visible'), 350 * (i + 1));
-    });
-  }
 }
 
 // --- Actions ---
@@ -614,6 +554,7 @@ function startQuizA() {
   state.answers = {};
   state.selectedOption = null;
   state.partnerAnswers = null;
+  window.history.replaceState({}, '', window.location.pathname);
   render();
 }
 
@@ -684,6 +625,21 @@ function resetQuiz() {
   state = { screen: 'home', currentQ: 0, answers: {}, partnerAnswers: null, selectedOption: null };
   window.history.replaceState({}, '', window.location.pathname);
   render();
+}
+
+function shareResults(encodedText) {
+  const text = decodeURIComponent(encodedText);
+  const url = SHARE_BASE_URL;
+  if (navigator.share) {
+    navigator.share({ title: '3,000 People Said This Quiz Ended in Divorce', text: text, url: url }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text + ' ' + url);
+    const btn = document.querySelector('.btn-accent');
+    if (btn) {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Share your results'; }, 2000);
+    }
+  }
 }
 
 // --- Init ---
