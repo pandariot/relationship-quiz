@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3,000 People Said This Quiz Ended in Divorce</title>
+<meta name="description" content="Can you and your partner pass the test? Both of you answer. Neither of you peek. See if you're even in the same relationship.">
+<meta property="og:title" content="3,000 People Said This Quiz Ended in Divorce">
+<meta property="og:description" content="Can you and your partner pass the test?">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0a;
+    --fg: #f5f0eb;
+    --accent: #c0392b;
+    --accent-hover: #a93226;
+    --muted: #6b6560;
+    --card: #141414;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+  #app {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .screen {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .screen.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .screen.hidden { display: none; }
+
+  .stat-number {
+    font-size: clamp(64px, 15vw, 120px);
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+  .label-upper {
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 16px 0;
+    font-style: italic;
+  }
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 18px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 48px;
+    font-weight: 400;
+  }
+  .body-text {
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px 24px;
+    border: 1px solid rgba(245,240,235,0.12);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--fg);
+    font-size: 16px;
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .btn:hover {
+    background: rgba(245,240,235,0.04);
+    border-color: rgba(245,240,235,0.25);
+  }
+  .btn.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(0.98);
+  }
+  .btn-accent {
+    display: block;
+    width: 100%;
+    padding: 18px 24px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--fg);
+    font-size: 14px;
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .btn-accent:hover { background: var(--accent-hover); }
+  .btn-outline {
+    display: block;
+    width: 100%;
+    padding: 18px 24px;
+    border: 1px solid rgba(245,240,235,0.12);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--fg);
+    font-size: 14px;
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .btn-outline:hover { background: rgba(245,240,235,0.04); }
+  .btn-ghost {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    text-align: center;
+  }
+  .btn-ghost:hover { color: var(--fg); }
+
+  .role-btn {
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .role-btn .role-title { font-weight: 600; margin-bottom: 4px; }
+  .role-btn .role-desc { font-size: 13px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+
+  /* Progress bar */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .progress-pip {
+    width: 100%;
+    max-width: 28px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(245,240,235,0.12);
+    transition: background 0.3s ease;
+  }
+  .progress-pip.done { background: var(--accent); }
+  .progress-pip.current { background: var(--fg); }
+
+  /* Question */
+  .question-text {
+    font-size: clamp(22px, 5vw, 28px);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 32px;
+    font-style: italic;
+    min-height: 72px;
+  }
+
+  /* Code display */
+  .code-card {
+    background: var(--card);
+    border: 1px solid rgba(245,240,235,0.12);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .code-text {
+    font-size: 40px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--fg);
+  }
+  .copy-link {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    margin-top: 12px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .copy-link:hover { color: var(--fg); }
+
+  /* Share link box */
+  .share-box {
+    background: var(--card);
+    border: 1px solid rgba(245,240,235,0.12);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    word-break: break-all;
+  }
+  .share-url {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    line-height: 1.6;
+    user-select: all;
+  }
+
+  /* Results */
+  .verdict-score {
+    font-size: clamp(48px, 12vw, 80px);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .verdict-label {
+    font-size: clamp(28px, 7vw, 42px);
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .verdict-desc {
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 36px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .result-card {
+    text-align: left;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s ease;
+  }
+  .result-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .result-card.matched { border-left-color: #22c55e; }
+  .result-q {
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .result-answers {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+  }
+  .result-label {
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .result-status {
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .result-status.match { color: #22c55e; }
+  .result-status.mismatch { color: var(--accent); }
+
+  .error-text {
+    color: var(--accent);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 12px;
+  }
+
+  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+  .loading-text {
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    question: "Someone offers your partner $3 million, but they have to live with their most toxic ex for 3 years first. Are they taking the deal?",
+    options: ["Absolutely, we'd survive it", "They'd seriously consider it", "No chance — they wouldn't risk us", "They don't have a toxic ex (sure)"],
+  },
+  {
+    id: 2,
+    question: "If you could read through your partner's entire text history right now without them knowing — do you think you'd find something that starts a fight?",
+    options: ["No, they're an open book", "Maybe something mildly annoying", "There's definitely a conversation I wouldn't love", "I'd rather not find out"],
+  },
+  {
+    id: 3,
+    question: "Zombie apocalypse. Honestly — is your partner an asset or a liability?",
+    options: ["Full asset. I'd be dead without them.", "Asset, but I'm carrying the team", "Liability, but a lovable one", "I'm not sure we'd stick together"],
+  },
+  {
+    id: 4,
+    question: "If your partner disappeared under mysterious circumstances and was presumed dead, how long before they'd download a dating app?",
+    options: ["At least a year. They'd be wrecked.", "6 months — grieving but moving on", "3 months tops", "The apps are already on their phone"],
+  },
+  {
+    id: 5,
+    question: "A scientifically perfect algorithm says it's found your actual, 100% compatible soulmate — and it's not your partner. What do you do?",
+    options: ["Ignore it completely, I chose who I chose", "Be curious but never act on it", "Look them up, just to see", "Start questioning everything"],
+  },
+  {
+    id: 6,
+    question: "Your partner wins $100 million in the lottery tomorrow. How much do they give you?",
+    options: ["All of it — what's theirs is ours", "A generous split, but they keep more", "They'd 'handle the finances' suspiciously", "I'd have to ask for it"],
+  },
+  {
+    id: 7,
+    question: "You could secretly watch a 24/7 livestream of your partner for a week without them knowing. Are you watching?",
+    options: ["No, that's unhinged", "Maybe a peek out of curiosity", "I'd check in a few times, yeah", "I'd have it on like background TV"],
+  },
+  {
+    id: 8,
+    question: "Who in this relationship is more likely to be the one that got away for someone else?",
+    options: ["Me, honestly", "My partner", "Both of us — we're both catches", "Neither. Let's be real."],
+  },
+  {
+    id: 9,
+    question: "If your partner could go back in time and meet you earlier — like 5 years earlier — would they have been into you?",
+    options: ["100%. We'd have worked at any age.", "Probably not, we were different people", "They would've liked me, I might not have liked them", "We'd have been a disaster"],
+  },
+  {
+    id: 10,
+    question: "Your partner committed a non-violent crime and got 5 years in prison. Are you waiting?",
+    options: ["Without question. I'm visiting every week.", "I'd try, but 5 years is a long time", "I'd wait a year or two before reassessing", "I love them but I'm not doing that"],
+  },
+  {
+    id: 11,
+    question: "If your friends could say one brutally honest thing about your relationship, what would it be?",
+    options: ["'You two are annoyingly perfect together'", "'One of you likes the other one more'", "'We don't get it but you seem happy'", "'We've been waiting for this conversation'"],
+  },
+  {
+    id: 12,
+    question: "Be honest: is there an ick your partner has that you pretend doesn't bother you?",
+    options: ["No, I genuinely accept all of it", "There's one small thing I've buried", "There are a few things I've learned to ignore", "There's one big one I will take to the grave"],
+  },
+  {
+    id: 13,
+    question: "If you two broke up tomorrow, who recovers faster?",
+    options: ["I would", "They would", "We'd both be a mess for a long time", "We'd both be fine within a month"],
+  },
+  {
+    id: 14,
+    question: "Your partner gets a dream job offer in another country. What happens?",
+    options: ["I'm going with them, no question", "We'd try long distance", "I'd want them to go but I'm not moving", "This would probably end us"],
+  },
+  {
+    id: 15,
+    question: "Last one. Right now, at this exact moment — does your partner think this relationship is forever?",
+    options: ["Yes. Absolutely. No doubt.", "Probably, but they've got a small voice of doubt", "I think they hope so but aren't sure", "I honestly don't know"],
+  },
+];
+
+// --- Encoding / Decoding ---
+function encodeAnswers(answers) {
+  // answers is {1: 0, 2: 3, ...} — 15 questions, values 0-3
+  // Pack into a string of hex chars (each answer = 1 char)
+  let s = '';
+  for (let i = 1; i <= 15; i++) s += (answers[i] ?? 0).toString();
+  return btoa(s).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
+
+function decodeAnswers(code) {
+  try {
+    let b = code.replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) b += '=';
+    const s = atob(b);
+    if (s.length !== 15) return null;
+    const answers = {};
+    for (let i = 0; i < 15; i++) {
+      const v = parseInt(s[i]);
+      if (isNaN(v) || v < 0 || v > 3) return null;
+      answers[i + 1] = v;
+    }
+    return answers;
+  } catch (e) { return null; }
+}
+
+function getShareURL(answers) {
+  const code = encodeAnswers(answers);
+  const base = window.location.origin + window.location.pathname;
+  return base + '?p=' + code;
+}
+
+function getPartnerAnswersFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const p = params.get('p');
+  if (!p) return null;
+  return decodeAnswers(p);
+}
+
+function getVerdict(matchCount, total) {
+  const pct = (matchCount / total) * 100;
+  if (pct >= 80) return { label: "PASSED", desc: "You two are disturbingly aligned. Either you're soulmates or you're the same person.", color: "#22c55e" };
+  if (pct >= 60) return { label: "BARELY PASSED", desc: "Close enough. You're in the same relationship — just reading slightly different chapters of it.", color: "#eab308" };
+  if (pct >= 40) return { label: "CONCERNING", desc: "You're not in the same relationship. You're in two different relationships that happen to share a bed.", color: "#f97316" };
+  return { label: "DIVORCED", desc: "3,001. The gap between your answers is the gap between your realities. Maybe sit down and talk tonight.", color: "#ef4444" };
+}
+
+// --- State ---
+let state = {
+  screen: 'home', // home, quiz-a, share, quiz-b, results
+  currentQ: 0,
+  answers: {},
+  partnerAnswers: null,
+  selectedOption: null,
+};
+
+const partnerFromURL = getPartnerAnswersFromURL();
+if (partnerFromURL) {
+  state.screen = 'quiz-b';
+  state.partnerAnswers = partnerFromURL;
+}
+
+// --- Rendering ---
+const app = document.getElementById('app');
+
+function render() {
+  const s = state;
+  let html = '';
+
+  if (s.screen === 'home') {
+    html = `
+      <div class="screen visible" id="screen-home">
+        <div class="stat-number">3,000</div>
+        <p class="label-upper">people said this quiz</p>
+        <h1>ended in divorce.</h1>
+        <p class="subtitle">Both of you answer. Neither of you peek.<br>See if you're even in the same relationship.</p>
+        <button class="btn-accent" onclick="startQuizA()">I'll go first</button>
+        <div style="height:8px"></div>
+        <button class="btn-outline" onclick="goHome()">My partner already went — where's the link?</button>
+      </div>
+    `;
+  }
+
+  else if (s.screen === 'quiz-a' || s.screen === 'quiz-b') {
+    const q = QUESTIONS[s.currentQ];
+    const who = s.screen === 'quiz-a' ? 'Partner A' : 'Partner B';
+    let pips = '';
+    for (let i = 0; i < QUESTIONS.length; i++) {
+      const cls = i < s.currentQ ? 'done' : i === s.currentQ ? 'current' : '';
+      pips += `<div class="progress-pip ${cls}"></div>`;
+    }
+    let opts = '';
+    q.options.forEach((opt, i) => {
+      const sel = s.selectedOption === i ? 'selected' : '';
+      opts += `<button class="btn ${sel}" onclick="selectAnswer(${q.id}, ${i})">${opt}</button>`;
+    });
+    html = `
+      <div class="screen visible">
+        <div class="progress-bar">${pips}</div>
+        <p class="label-upper">${who} · Question ${s.currentQ + 1} of ${QUESTIONS.length}</p>
+        <div class="question-text">${q.question}</div>
+        <div>${opts}</div>
+      </div>
+    `;
+  }
+
+  else if (s.screen === 'share') {
+    const url = getShareURL(s.answers);
+    html = `
+      <div class="screen visible">
+        <div style="font-size:48px;margin-bottom:16px">✓</div>
+        <h2>Your answers are locked in.</h2>
+        <p class="body-text">Send this link to your partner. They'll answer the same questions from their own perspective. Neither of you will see what the other said until both are done.</p>
+        <div class="share-box">
+          <div class="share-url" id="share-url">${url}</div>
+        </div>
+        <button class="btn-accent" onclick="copyLink()">Copy link</button>
+        <div style="height:8px"></div>
+        <button class="btn-ghost" onclick="resetQuiz()">Start over</button>
+      </div>
+    `;
+  }
+
+  else if (s.screen === 'results') {
+    const my = s.answers;
+    const theirs = s.partnerAnswers;
+    let matchCount = 0;
+    QUESTIONS.forEach(q => { if (my[q.id] === theirs[q.id]) matchCount++; });
+    const v = getVerdict(matchCount, QUESTIONS.length);
+
+    let cards = '';
+    QUESTIONS.forEach((q, i) => {
+      const matched = my[q.id] === theirs[q.id];
+      cards += `
+        <div class="result-card ${matched ? 'matched' : ''}" data-index="${i}">
+          <div class="result-q">Q${i+1}: ${q.question}</div>
+          <div class="result-answers">
+            <div><span class="result-label">Partner A: </span>${q.options[theirs[q.id]]}</div>
+            <div style="text-align:right"><span class="result-label">Partner B: </span>${q.options[my[q.id]]}</div>
+          </div>
+          <div class="result-status ${matched ? 'match' : 'mismatch'}">${matched ? '✓ Same page' : '✗ Different realities'}</div>
+        </div>
+      `;
+    });
+
+    html = `
+      <div class="screen visible">
+        <div class="verdict-score" style="color:${v.color}">${matchCount}/${QUESTIONS.length}</div>
+        <p class="label-upper">Questions you saw the same way</p>
+        <div class="verdict-label" style="color:${v.color}">${v.label}</div>
+        <p class="verdict-desc">${v.desc}</p>
+        <div id="result-cards">${cards}</div>
+        <div style="height:24px"></div>
+        <button class="btn-outline" onclick="resetQuiz()">Take it again</button>
+      </div>
+    `;
+  }
+
+  else if (s.screen === 'no-link') {
+    html = `
+      <div class="screen visible">
+        <h2>You need a link from your partner.</h2>
+        <p class="body-text">Your partner goes first, answers 15 questions, and gets a special link to send you. Open that link to take the quiz and see your results together.</p>
+        <button class="btn-accent" onclick="startQuizA()">I'll go first instead</button>
+        <div style="height:8px"></div>
+        <button class="btn-ghost" onclick="goToHome()">← Back</button>
+      </div>
+    `;
+  }
+
+  app.innerHTML = html;
+
+  // Animate result cards
+  if (s.screen === 'results') {
+    const cards = document.querySelectorAll('.result-card');
+    cards.forEach((card, i) => {
+      setTimeout(() => card.classList.add('visible'), 350 * (i + 1));
+    });
+  }
+}
+
+// --- Actions ---
+function startQuizA() {
+  state.screen = 'quiz-a';
+  state.currentQ = 0;
+  state.answers = {};
+  state.selectedOption = null;
+  state.partnerAnswers = null;
+  render();
+}
+
+function goHome() {
+  if (partnerFromURL) {
+    state.screen = 'quiz-b';
+    state.currentQ = 0;
+    state.answers = {};
+    state.partnerAnswers = partnerFromURL;
+    render();
+  } else {
+    state.screen = 'no-link';
+    render();
+  }
+}
+
+function goToHome() {
+  state.screen = 'home';
+  render();
+}
+
+function selectAnswer(questionId, optionIndex) {
+  if (state.selectedOption !== null) return;
+  state.selectedOption = optionIndex;
+  state.answers[questionId] = optionIndex;
+  render();
+
+  setTimeout(() => {
+    state.selectedOption = null;
+    if (state.currentQ < QUESTIONS.length - 1) {
+      state.currentQ++;
+      render();
+    } else {
+      if (state.screen === 'quiz-a') {
+        state.screen = 'share';
+        render();
+      } else if (state.screen === 'quiz-b') {
+        state.screen = 'results';
+        // Clean URL so refreshing doesn't restart quiz-b
+        window.history.replaceState({}, '', window.location.pathname);
+        render();
+      }
+    }
+  }, 400);
+}
+
+function copyLink() {
+  const url = getShareURL(state.answers);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url);
+    const btn = document.querySelector('.btn-accent');
+    if (btn) {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
+    }
+  }
+  // Also try native share on mobile
+  if (navigator.share) {
+    navigator.share({
+      title: '3,000 People Said This Quiz Ended in Divorce',
+      text: 'Can we pass the test? Take the quiz.',
+      url: url,
+    }).catch(() => {});
+  }
+}
+
+function resetQuiz() {
+  state = { screen: 'home', currentQ: 0, answers: {}, partnerAnswers: null, selectedOption: null };
+  window.history.replaceState({}, '', window.location.pathname);
+  render();
+}
+
+// --- Init ---
+render();
+</script>
+</body>
+</html>
