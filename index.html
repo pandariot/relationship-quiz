@@ -471,12 +471,16 @@ function render() {
       const sel = s.selectedOption === i ? 'selected' : '';
       opts += `<button class="btn ${sel}" onclick="selectAnswer(${q.id}, ${i})">${opt}</button>`;
     });
+    const backBtn = s.currentQ > 0
+      ? `<button class="btn-ghost" onclick="goBackQuestion()">← Back</button>`
+      : '';
     html = `
       <div class="screen visible">
         <div class="progress-bar">${pips}</div>
         <p class="label-upper">${who} · Question ${s.currentQ + 1} of ${QUESTIONS.length}</p>
         <div class="question-text">${q.question}</div>
         <div>${opts}</div>
+        ${backBtn}
       </div>
     `;
   }
@@ -561,6 +565,14 @@ function goHome() {
 function goToHome() {
   state.screen = 'home';
   render();
+}
+
+function goBackQuestion() {
+  if (state.currentQ > 0) {
+    state.currentQ--;
+    state.selectedOption = null;
+    render();
+  }
 }
 
 function selectAnswer(questionId, optionIndex) {
