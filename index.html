@@ -7,7 +7,7 @@
 <meta name="description" content="Can you and your partner pass the test? Both of you answer. Neither of you peek. See if you're even in the same relationship.">
 <meta property="og:title" content="3,000 People Said This Quiz Ended in Divorce">
 <meta property="og:description" content="Can you and your partner pass the test?">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -17,6 +17,10 @@
     --accent-hover: #a93226;
     --muted: #6b6560;
     --card: #141414;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --orange: #f97316;
+    --red: #ef4444;
   }
   body {
     background: var(--bg);
@@ -212,34 +216,6 @@
     min-height: 72px;
   }
 
-  /* Code display */
-  .code-card {
-    background: var(--card);
-    border: 1px solid rgba(245,240,235,0.12);
-    border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 24px;
-  }
-  .code-text {
-    font-size: 40px;
-    font-family: 'DM Mono', monospace;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    color: var(--fg);
-  }
-  .copy-link {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    margin-top: 12px;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .copy-link:hover { color: var(--fg); }
-
   /* Share link box */
   .share-box {
     background: var(--card);
@@ -257,23 +233,157 @@
     user-select: all;
   }
 
-  /* Results */
-  .verdict-score {
-    font-size: clamp(48px, 12vw, 80px);
+  /* ========== RESULTS ========== */
+  .results-container { text-align: center; }
+
+  /* Tier name */
+  .tier-name {
+    font-size: clamp(36px, 9vw, 52px);
     font-weight: 900;
-    line-height: 1;
+    font-style: italic;
+    line-height: 1.1;
     margin-bottom: 4px;
   }
-  .verdict-desc {
+  .tier-score {
     font-size: 15px;
     font-family: 'DM Sans', sans-serif;
     color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  /* Alignment grid */
+  .alignment-grid {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .alignment-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  .alignment-dot.match { background: var(--green); }
+  .alignment-dot.miss { background: rgba(245,240,235,0.1); border: 1px solid rgba(245,240,235,0.08); }
+  .grid-label {
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .grid-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .grid-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .grid-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* Verdict */
+  .verdict-text {
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--fg);
     line-height: 1.6;
-    margin-bottom: 36px;
-    max-width: 400px;
+    margin-bottom: 40px;
+    max-width: 420px;
     margin-left: auto;
     margin-right: auto;
+    opacity: 0.85;
   }
+
+  /* Divider */
+  .results-divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(245,240,235,0.15);
+    margin: 0 auto 40px auto;
+  }
+
+  /* Category cards */
+  .category-section {
+    margin-bottom: 40px;
+    text-align: left;
+  }
+  .category-section-title {
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .category-card {
+    background: var(--card);
+    border: 1px solid rgba(245,240,235,0.08);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .category-name {
+    font-size: 16px;
+    font-weight: 700;
+    font-style: italic;
+  }
+  .category-score {
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+  }
+  .category-bar-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(245,240,235,0.08);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .category-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .category-reading {
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Share actions */
+  .results-actions {
+    margin-top: 40px;
+  }
+  .results-actions .btn-accent,
+  .results-actions .btn-outline {
+    margin-bottom: 10px;
+  }
+
   .error-text {
     color: var(--accent);
     font-size: 14px;
@@ -290,10 +400,14 @@
     color: var(--muted);
     animation: pulse 1.5s ease-in-out infinite;
   }
+
+  /* Canvas for download (hidden) */
+  #results-canvas { display: none; }
 </style>
 </head>
 <body>
 <div id="app"></div>
+<canvas id="results-canvas"></canvas>
 
 <script>
 const QUESTIONS = [
@@ -301,83 +415,177 @@ const QUESTIONS = [
     id: 1,
     question: "Someone offers your partner $3 million, but they have to live with their most toxic ex for 3 years first. Are they taking the deal?",
     options: ["Absolutely, we'd survive it", "They'd seriously consider it", "No chance, they wouldn't risk us", "They don't have a toxic ex (sure)"],
+    category: "trust"
   },
   {
     id: 2,
     question: "If you could read through your partner's entire text history right now without them knowing, do you think you'd find something that starts a fight?",
     options: ["No, they're an open book", "Maybe something mildly annoying", "There's definitely a conversation I wouldn't love", "I'd rather not find out"],
+    category: "pressure"
   },
   {
     id: 3,
     question: "The zombie apocalypse is here. Is your partner an asset or a liability?",
     options: ["Full asset. I'd be dead without them.", "Asset, but I'm carrying the team", "Liability, but a lovable one", "I'm not sure we'd stick together"],
+    category: "perception"
   },
   {
     id: 4,
     question: "If you disappeared under mysterious circumstances and were presumed dead, how long before your partner would download a dating app?",
     options: ["At least a year. They'd be wrecked.", "6 months, grieving but moving on", "3 months tops", "The apps are already on their phone"],
+    category: "future"
   },
   {
     id: 5,
     question: "A scientifically perfect algorithm says it's found your actual, 100% compatible soulmate, and it's not your partner. What do you do?",
     options: ["Ignore it completely, I chose who I chose", "Be curious but never act on it", "Look them up, just to see", "Start questioning everything"],
+    category: "trust"
   },
   {
     id: 6,
     question: "Your partner wins $100 million in the lottery tomorrow. How much do they give you?",
     options: ["All of it, what's theirs is ours", "A generous split, but they keep more", "They'd 'handle the finances' suspiciously", "I'd have to ask for it"],
+    category: "pressure"
   },
   {
     id: 7,
     question: "You could secretly watch a 24/7 livestream of your partner for a week without them knowing. Are you watching?",
     options: ["No, that's unhinged", "Maybe a peek out of curiosity", "I'd check in a few times, yeah", "I'd have it on like background TV"],
+    category: "pressure"
   },
   {
     id: 8,
     question: "Who in this relationship is more likely to be \"the one that got away\" for someone else?",
     options: ["Me, honestly", "My partner", "Both of us, we're both catches", "Neither. Let's be real."],
+    category: "perception"
   },
   {
     id: 9,
     question: "If your partner could go back in time and meet you 5 years earlier, would they have been into you?",
     options: ["100%. We'd have worked at any age.", "Probably not, we were different people", "They would've liked me, I might not have liked them", "We'd have been a disaster"],
+    category: "perception"
   },
   {
     id: 10,
     question: "Your partner committed a non-violent crime and got 5 years in prison. Are you waiting?",
     options: ["Without question. I'm visiting every week.", "I'd try, but 5 years is a long time", "I'd wait a year or two before reassessing", "I love them but I'm not doing that"],
+    category: "trust"
   },
   {
     id: 11,
     question: "If your friends could say one brutally honest thing about your relationship, what would it be?",
     options: ["'You two are annoyingly perfect together'", "'One of you likes the other one more'", "'We don't get it but you seem happy'", "'We've been waiting for this conversation'"],
+    category: "perception"
   },
   {
     id: 12,
     question: "Be honest: is there an ick your partner has that you pretend doesn't bother you?",
     options: ["No, I genuinely accept all of it", "There's one small thing I've buried", "There are a few things I've learned to ignore", "There's one big one I will take to the grave"],
+    category: "pressure"
   },
   {
     id: 13,
     question: "If you two broke up tomorrow, who recovers faster?",
     options: ["I would", "They would", "We'd both be a mess for a long time", "We'd both be fine within a month"],
+    category: "future"
   },
   {
     id: 14,
     question: "Your partner gets a dream job offer in another country. What happens?",
     options: ["I'm going with them, no question", "We'd try long distance", "I'd want them to go but I'm not moving", "This would probably end us"],
+    category: "trust"
   },
   {
     id: 15,
     question: "Last one. Right now, at this exact moment. Does your partner think this relationship is forever?",
     options: ["Yes. Absolutely. No doubt.", "Probably, but they've got a small voice of doubt", "I think they hope so but aren't sure", "I honestly don't know"],
+    category: "future"
   },
 ];
 
+const CATEGORIES = {
+  trust: {
+    name: "Trust & Loyalty",
+    questionIds: [1, 5, 10, 14],
+    readings: {
+      high: "You two agree on the hard stuff. When it comes to ride-or-die questions, you're on the same page — and that's rarer than you think.",
+      mid: "You're mostly there, but there's a gap somewhere in what you'd sacrifice for each other. Not a red flag. Just a conversation waiting to happen.",
+      low: "You see loyalty through different lenses. One of you might be more all-in than the other realizes — or the other way around.",
+    }
+  },
+  perception: {
+    name: "How You See Each Other",
+    questionIds: [3, 8, 9, 11],
+    readings: {
+      high: "You actually see the same person when you look at each other. That sounds obvious but most couples are dating slightly different versions of each other in their heads.",
+      mid: "You're close, but you're not seeing the exact same relationship. The version of your partner that lives in your head might need an update.",
+      low: "This is where it gets interesting. You're not seeing the same person — or at least, not the same version of them. Worth talking about.",
+    }
+  },
+  pressure: {
+    name: "Under Pressure",
+    questionIds: [2, 6, 7, 12],
+    readings: {
+      high: "You handle the uncomfortable stuff the same way. When things get weird or stressful, you'd both reach for the same playbook.",
+      mid: "You mostly agree on what you'd do when things get hard. Mostly. There's at least one scenario where you'd surprise each other.",
+      low: "Under stress, you two go to different corners. That's not necessarily bad — but it means you process tension very differently.",
+    }
+  },
+  future: {
+    name: "The Future",
+    questionIds: [4, 13, 15],
+    readings: {
+      high: "You both see the same road ahead. Same timeline, same certainty, same destination. That kind of alignment is the whole point.",
+      mid: "One of you might be a little more sure than the other. That's not a dealbreaker — but it is a conversation.",
+      low: "You're looking at different horizons. One of you sees forever and the other sees...something else. This is the one to talk about.",
+    }
+  }
+};
+
+const TIERS = [
+  { min: 13, name: "Same Brain", color: "#22c55e", verdict: "Disgusting. In the best way. You two are so in sync it's almost annoying. Whatever you're doing, keep doing it — or at least tell the rest of us how." },
+  { min: 10, name: "Mostly Aligned", color: "#eab308", verdict: "You're not perfect but you're paying attention, and honestly that's the whole thing. The few places you didn't match? Those aren't problems. Those are the conversations you haven't had yet." },
+  { min: 6, name: "Different Chapters", color: "#f97316", verdict: "You're in the same relationship but reading different chapters. Not a red flag — just means you've both been assuming instead of asking. Good news: now you know exactly where to start." },
+  { min: 0, name: "Parallel Universes", color: "#ef4444", verdict: "Before you panic: this doesn't mean it's over. It means you've been filling in the blanks for each other instead of actually checking. The fact that you're both here? Better sign than the score." },
+];
+
+function getTier(matchCount) {
+  for (const t of TIERS) {
+    if (matchCount >= t.min) return t;
+  }
+  return TIERS[TIERS.length - 1];
+}
+
+function getCategoryResults(myAnswers, theirAnswers) {
+  const results = {};
+  for (const [key, cat] of Object.entries(CATEGORIES)) {
+    let matched = 0;
+    const total = cat.questionIds.length;
+    const matches = [];
+    cat.questionIds.forEach(qid => {
+      const m = myAnswers[qid] === theirAnswers[qid];
+      if (m) matched++;
+      matches.push(m);
+    });
+    const pct = matched / total;
+    let reading;
+    if (pct >= 0.75) reading = cat.readings.high;
+    else if (pct >= 0.4) reading = cat.readings.mid;
+    else reading = cat.readings.low;
+
+    let barColor;
+    if (pct >= 0.75) barColor = '#22c55e';
+    else if (pct >= 0.5) barColor = '#eab308';
+    else if (pct >= 0.25) barColor = '#f97316';
+    else barColor = '#ef4444';
+
+    results[key] = { name: cat.name, matched, total, pct, reading, barColor, matches };
+  }
+  return results;
+}
+
 // --- Encoding / Decoding ---
 function encodeAnswers(answers) {
-  // answers is {1: 0, 2: 3, ...} — 15 questions, values 0-3
-  // Pack into a string of hex chars (each answer = 1 char)
   let s = '';
   for (let i = 1; i <= 15; i++) s += (answers[i] ?? 0).toString();
   return btoa(s).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
@@ -399,7 +607,6 @@ function decodeAnswers(code) {
   } catch (e) { return null; }
 }
 
-// SET THIS to the BuzzFeed article URL where the quiz is embedded
 const SHARE_BASE_URL = 'https://www.buzzfeed.com/peggy/couples-quiz';
 
 function getShareURL(answers) {
@@ -414,17 +621,9 @@ function getPartnerAnswersFromURL() {
   return decodeAnswers(p);
 }
 
-function getVerdict(matchCount, total) {
-  const pct = (matchCount / total) * 100;
-  if (pct >= 80) return { desc: "Disgusting. In the best way. You two are so in sync it's almost annoying. Whatever you're doing, keep doing it.", color: "#22c55e" };
-  if (pct >= 60) return { desc: "Look at you two. You're not perfect but you're paying attention, and that's the whole thing. The few places you didn't match? Just means there's more to discover.", color: "#eab308" };
-  if (pct >= 40) return { desc: "You're in the same relationship but reading different chapters. That's not a bad thing. It just means there's a lot you're both assuming instead of saying out loud.", color: "#f97316" };
-  return { desc: "Before you panic: disagreeing doesn't mean it's over. It means you've been filling in the blanks for each other instead of actually asking. The fact that you're both here taking this? Better sign than the score.", color: "#ef4444" };
-}
-
 // --- State ---
 let state = {
-  screen: 'home', // home, quiz-a, share, quiz-b, results
+  screen: 'home',
   currentQ: 0,
   answers: {},
   partnerAnswers: null,
@@ -506,21 +705,80 @@ function render() {
     const my = s.answers;
     const theirs = s.partnerAnswers;
     let matchCount = 0;
-    QUESTIONS.forEach(q => { if (my[q.id] === theirs[q.id]) matchCount++; });
-    const v = getVerdict(matchCount, QUESTIONS.length);
+    const questionMatches = [];
+    QUESTIONS.forEach(q => {
+      const m = my[q.id] === theirs[q.id];
+      if (m) matchCount++;
+      questionMatches.push(m);
+    });
 
-    const shareText = `We got ${matchCount}/15 on the couples quiz.`;
+    const tier = getTier(matchCount);
+    const catResults = getCategoryResults(my, theirs);
+
+    // Build alignment grid
+    let gridDots = '';
+    questionMatches.forEach((m, i) => {
+      gridDots += `<div class="alignment-dot ${m ? 'match' : 'miss'}" title="Q${i+1}"></div>`;
+    });
+
+    // Build category cards
+    let catCards = '';
+    for (const [key, cr] of Object.entries(catResults)) {
+      const pctWidth = Math.max(cr.pct * 100, 4);
+      catCards += `
+        <div class="category-card">
+          <div class="category-header">
+            <div class="category-name">${cr.name}</div>
+            <div class="category-score" style="color:${cr.barColor}">${cr.matched}/${cr.total}</div>
+          </div>
+          <div class="category-bar-track">
+            <div class="category-bar-fill" style="width:${pctWidth}%;background:${cr.barColor}"></div>
+          </div>
+          <div class="category-reading">${cr.reading}</div>
+        </div>
+      `;
+    }
+
+    // Build share summary for categories
+    const catSummary = Object.values(catResults).map(cr => {
+      if (cr.pct >= 0.75) return cr.name + ' ✓';
+      if (cr.pct < 0.4) return cr.name + ' ✗';
+      return null;
+    }).filter(Boolean);
+
+    const shareText = `We got ${tier.name} (${matchCount}/15) on The Couples Quiz. 52% of couples don't pass. 👀`;
 
     html = `
-      <div class="screen visible">
-        <div class="verdict-score" style="color:${v.color}">${matchCount}/${QUESTIONS.length}</div>
-        <p class="label-upper">Questions you saw the same way</p>
-        <p class="verdict-desc">${v.desc}</p>
-        <button class="btn-accent" onclick="shareResults('${encodeURIComponent(shareText)}')">Share your results</button>
-        <div style="height:8px"></div>
-        <button class="btn-ghost" onclick="resetQuiz()">Think it's wrong? Take it again.</button>
+      <div class="screen visible results-container">
+        <p class="label-upper">Your alignment</p>
+        <div class="tier-name" style="color:${tier.color}">${tier.name}</div>
+        <div class="tier-score">${matchCount} out of 15 questions seen the same way</div>
+
+        <div class="alignment-grid">${gridDots}</div>
+        <div class="grid-legend">
+          <div class="grid-legend-item"><div class="grid-legend-dot" style="background:var(--green)"></div> Aligned</div>
+          <div class="grid-legend-item"><div class="grid-legend-dot" style="background:rgba(245,240,235,0.1);border:1px solid rgba(245,240,235,0.08)"></div> Misaligned</div>
+        </div>
+
+        <div class="verdict-text">${tier.verdict}</div>
+
+        <div class="results-divider"></div>
+
+        <div class="category-section">
+          <div class="category-section-title">The Breakdown</div>
+          ${catCards}
+        </div>
+
+        <div class="results-actions">
+          <button class="btn-accent" onclick="downloadResults()">Save your results</button>
+          <button class="btn-outline" onclick="shareResultsLink()">Share your score</button>
+          <button class="btn-ghost" onclick="resetQuiz()">Not satisfied? Take it again →</button>
+        </div>
       </div>
     `;
+
+    // Store for share/download functions
+    window._lastResults = { matchCount, tier, catResults, questionMatches, shareText };
   }
 
   else if (s.screen === 'no-link') {
@@ -592,7 +850,6 @@ function selectAnswer(questionId, optionIndex) {
         render();
       } else if (state.screen === 'quiz-b') {
         state.screen = 'results';
-        // Clean URL so refreshing doesn't restart quiz-b
         try { window.history.replaceState({}, '', window.location.pathname); } catch(e) {}
         render();
       }
@@ -635,19 +892,202 @@ function resetQuiz() {
   render();
 }
 
-function shareResults(encodedText) {
-  const text = decodeURIComponent(encodedText);
+// --- Share results link ---
+function shareResultsLink() {
+  const r = window._lastResults;
+  if (!r) return;
+  const text = r.shareText;
   const url = SHARE_BASE_URL;
   if (navigator.share) {
-    navigator.share({ title: '3,000 People Said This Quiz Ended in Divorce', text: text, url: url }).catch(() => {});
+    navigator.share({ title: 'The Couples Quiz', text: text, url: url }).catch(() => {});
   } else {
-    fallbackCopy(text + ' ' + url);
-    const btn = document.querySelector('.btn-accent');
+    fallbackCopy(text + '\n' + url);
+    const btn = document.querySelector('.btn-outline');
     if (btn) {
       btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Share your results'; }, 2000);
+      setTimeout(() => { btn.textContent = 'Share your score'; }, 2000);
     }
   }
+}
+
+// --- Download results as image ---
+function downloadResults() {
+  const r = window._lastResults;
+  if (!r) return;
+
+  const canvas = document.getElementById('results-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080;
+  const H = 1920;
+  const dpr = 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.scale(dpr, dpr);
+
+  // Background
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, W, H);
+
+  // Noise overlay (subtle)
+  ctx.globalAlpha = 0.03;
+  for (let i = 0; i < 8000; i++) {
+    ctx.fillStyle = Math.random() > 0.5 ? '#fff' : '#000';
+    ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+  }
+  ctx.globalAlpha = 1;
+
+  // Header
+  ctx.fillStyle = '#6b6560';
+  ctx.font = '600 24px "DM Sans", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('THE COUPLES QUIZ', W/2, 160);
+
+  // Tier name
+  ctx.fillStyle = r.tier.color;
+  ctx.font = '900 italic 88px "Playfair Display", Georgia, serif';
+  ctx.fillText(r.tier.name, W/2, 290);
+
+  // Score
+  ctx.fillStyle = '#6b6560';
+  ctx.font = '400 28px "DM Sans", sans-serif';
+  ctx.fillText(`${r.matchCount} out of 15 aligned`, W/2, 340);
+
+  // Alignment grid
+  const dotSize = 48;
+  const dotGap = 10;
+  const totalDotsW = 15 * dotSize + 14 * dotGap;
+  const gridStartX = (W - totalDotsW) / 2;
+  const gridY = 400;
+
+  r.questionMatches.forEach((m, i) => {
+    const x = gridStartX + i * (dotSize + dotGap);
+    if (m) {
+      ctx.fillStyle = '#22c55e';
+    } else {
+      ctx.fillStyle = 'rgba(245,240,235,0.08)';
+    }
+    roundRect(ctx, x, gridY, dotSize, dotSize, 6);
+    ctx.fill();
+    if (!m) {
+      ctx.strokeStyle = 'rgba(245,240,235,0.06)';
+      ctx.lineWidth = 1;
+      roundRect(ctx, x, gridY, dotSize, dotSize, 6);
+      ctx.stroke();
+    }
+  });
+
+  // Divider
+  ctx.fillStyle = 'rgba(245,240,235,0.15)';
+  ctx.fillRect(W/2 - 30, 500, 60, 1);
+
+  // Category breakdowns
+  let catY = 560;
+  const catPadX = 100;
+  const catW = W - catPadX * 2;
+
+  for (const [key, cr] of Object.entries(r.catResults)) {
+    // Card bg
+    ctx.fillStyle = '#141414';
+    roundRect(ctx, catPadX, catY, catW, 220, 16);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(245,240,235,0.06)';
+    ctx.lineWidth = 1;
+    roundRect(ctx, catPadX, catY, catW, 220, 16);
+    ctx.stroke();
+
+    // Category name
+    ctx.fillStyle = '#f5f0eb';
+    ctx.font = '700 italic 30px "Playfair Display", Georgia, serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(cr.name, catPadX + 28, catY + 42);
+
+    // Score
+    ctx.fillStyle = cr.barColor;
+    ctx.font = '700 28px "DM Sans", sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${cr.matched}/${cr.total}`, catPadX + catW - 28, catY + 42);
+
+    // Bar track
+    const barY = catY + 64;
+    const barW = catW - 56;
+    ctx.fillStyle = 'rgba(245,240,235,0.06)';
+    roundRect(ctx, catPadX + 28, barY, barW, 6, 3);
+    ctx.fill();
+
+    // Bar fill
+    ctx.fillStyle = cr.barColor;
+    const fillW = Math.max(barW * cr.pct, 8);
+    roundRect(ctx, catPadX + 28, barY, fillW, 6, 3);
+    ctx.fill();
+
+    // Reading
+    ctx.fillStyle = '#6b6560';
+    ctx.font = '400 24px "DM Sans", sans-serif';
+    ctx.textAlign = 'left';
+    wrapText(ctx, cr.reading, catPadX + 28, barY + 38, catW - 56, 34);
+
+    catY += 240;
+  }
+
+  // Footer URL
+  ctx.fillStyle = '#6b6560';
+  ctx.font = '400 22px "DM Sans", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('www.buzzfeed.com/peggy/couples-quiz', W/2, H - 80);
+
+  // Trigger download
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `couples-quiz-${r.tier.name.toLowerCase().replace(/\s+/g, '-')}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 'image/png');
+
+  // Button feedback
+  const btn = document.querySelector('.btn-accent');
+  if (btn) {
+    btn.textContent = 'Saved!';
+    setTimeout(() => { btn.textContent = 'Save your results'; }, 2000);
+  }
+}
+
+// Helper: rounded rect
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// Helper: wrap text
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let testLine, metrics;
+  for (let n = 0; n < words.length; n++) {
+    testLine = line + words[n] + ' ';
+    metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && n > 0) {
+      ctx.fillText(line.trim(), x, y);
+      line = words[n] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line.trim(), x, y);
 }
 
 // --- Init ---
@@ -658,7 +1098,6 @@ function postHeight() {
   const height = document.documentElement.scrollHeight;
   window.parent.postMessage({ type: 'resize', height: height }, '*');
 }
-// Post height after every render and on load
 const _origRender = render;
 render = function() { _origRender(); requestAnimationFrame(() => setTimeout(postHeight, 50)); };
 window.addEventListener('load', () => setTimeout(postHeight, 100));
