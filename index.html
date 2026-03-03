@@ -264,12 +264,6 @@
     line-height: 1;
     margin-bottom: 4px;
   }
-  .verdict-label {
-    font-size: clamp(28px, 7vw, 42px);
-    font-weight: 700;
-    font-style: italic;
-    margin-bottom: 8px;
-  }
   .verdict-desc {
     font-size: 15px;
     font-family: 'DM Sans', sans-serif;
@@ -422,10 +416,10 @@ function getPartnerAnswersFromURL() {
 
 function getVerdict(matchCount, total) {
   const pct = (matchCount / total) * 100;
-  if (pct >= 80) return { label: "PASSED", desc: "You two are disturbingly aligned. Either you're soulmates or you're the same person.", color: "#22c55e" };
-  if (pct >= 60) return { label: "BARELY PASSED", desc: "Close enough. You're in the same relationship, just reading slightly different chapters of it.", color: "#eab308" };
-  if (pct >= 40) return { label: "CONCERNING", desc: "You're not in the same relationship. You're in two different relationships that happen to share a bed.", color: "#f97316" };
-  return { label: "DIVORCED", desc: "3,001. The gap between your answers is the gap between your realities. Maybe sit down and talk tonight.", color: "#ef4444" };
+  if (pct >= 80) return { desc: "Disgusting. In the best way. You two are so in sync it's almost annoying. Whatever you're doing, keep doing it.", color: "#22c55e" };
+  if (pct >= 60) return { desc: "Look at you two. You're not perfect but you're paying attention, and that's the whole thing. The few places you didn't match? Just means there's more to discover.", color: "#eab308" };
+  if (pct >= 40) return { desc: "You're in the same relationship but reading different chapters. That's not a bad thing. It just means there's a lot you're both assuming instead of saying out loud.", color: "#f97316" };
+  return { desc: "Before you panic: disagreeing doesn't mean it's over. It means you've been filling in the blanks for each other instead of actually asking. The fact that you're both here taking this? Better sign than the score.", color: "#ef4444" };
 }
 
 // --- State ---
@@ -511,23 +505,16 @@ function render() {
     QUESTIONS.forEach(q => { if (my[q.id] === theirs[q.id]) matchCount++; });
     const v = getVerdict(matchCount, QUESTIONS.length);
 
-    const shareText = matchCount >= 12
-      ? `We got ${matchCount}/15 on the divorce quiz. PASSED.`
-      : matchCount >= 9
-      ? `We got ${matchCount}/15 on the divorce quiz. BARELY PASSED.`
-      : matchCount >= 6
-      ? `We got ${matchCount}/15 on the divorce quiz. It said CONCERNING.`
-      : `We got ${matchCount}/15 on the divorce quiz. We did not pass.`;
+    const shareText = `We got ${matchCount}/15 on the couples quiz.`;
 
     html = `
       <div class="screen visible">
         <div class="verdict-score" style="color:${v.color}">${matchCount}/${QUESTIONS.length}</div>
         <p class="label-upper">Questions you saw the same way</p>
-        <div class="verdict-label" style="color:${v.color}">${v.label}</div>
         <p class="verdict-desc">${v.desc}</p>
         <button class="btn-accent" onclick="shareResults('${encodeURIComponent(shareText)}')">Share your results</button>
         <div style="height:8px"></div>
-        <button class="btn-ghost" onclick="startQuizA()">Think it's wrong? Take it again.</button>
+        <button class="btn-ghost" onclick="resetQuiz()">Think it's wrong? Take it again.</button>
       </div>
     `;
   }
@@ -554,7 +541,7 @@ function startQuizA() {
   state.answers = {};
   state.selectedOption = null;
   state.partnerAnswers = null;
-  window.history.replaceState({}, '', window.location.pathname);
+  try { window.history.replaceState({}, '', window.location.pathname); } catch(e) {}
   render();
 }
 
@@ -594,36 +581,45 @@ function selectAnswer(questionId, optionIndex) {
       } else if (state.screen === 'quiz-b') {
         state.screen = 'results';
         // Clean URL so refreshing doesn't restart quiz-b
-        window.history.replaceState({}, '', window.location.pathname);
+        try { window.history.replaceState({}, '', window.location.pathname); } catch(e) {}
         render();
       }
     }
   }, 400);
 }
 
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
 function copyLink() {
   const url = getShareURL(state.answers);
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url);
-    const btn = document.querySelector('.btn-accent');
-    if (btn) {
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
-    }
-  }
-  // Also try native share on mobile
   if (navigator.share) {
     navigator.share({
       title: '3,000 People Said This Quiz Ended in Divorce',
       text: 'Can we pass the test? Take the quiz.',
       url: url,
     }).catch(() => {});
+  } else {
+    fallbackCopy(url);
+    const btn = document.querySelector('.btn-accent');
+    if (btn) {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
+    }
   }
 }
 
 function resetQuiz() {
   state = { screen: 'home', currentQ: 0, answers: {}, partnerAnswers: null, selectedOption: null };
-  window.history.replaceState({}, '', window.location.pathname);
+  try { window.history.replaceState({}, '', window.location.pathname); } catch(e) {}
   render();
 }
 
@@ -632,8 +628,8 @@ function shareResults(encodedText) {
   const url = SHARE_BASE_URL;
   if (navigator.share) {
     navigator.share({ title: '3,000 People Said This Quiz Ended in Divorce', text: text, url: url }).catch(() => {});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(text + ' ' + url);
+  } else {
+    fallbackCopy(text + ' ' + url);
     const btn = document.querySelector('.btn-accent');
     if (btn) {
       btn.textContent = 'Copied!';
