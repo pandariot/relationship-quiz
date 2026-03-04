@@ -122,7 +122,7 @@ function getPartnerFromURL(){const p=new URLSearchParams(window.location.search)
 
 let state={screen:'home',currentQ:0,answers:{},partnerAnswers:null,selectedOption:null};
 const partnerFromURL=getPartnerFromURL();
-if(partnerFromURL){state.screen='quiz-b';state.partnerAnswers=partnerFromURL;}
+if(partnerFromURL){state.screen='home-b';state.partnerAnswers=partnerFromURL;}
 
 const app=document.getElementById('app');
 
@@ -138,6 +138,16 @@ function render(){
       <button class="btn-accent" onclick="startQuizA()">I'll go first</button>
       <div style="height:8px"></div>
       <button class="btn-outline" onclick="goHome()">My partner took this, where's the link?</button>
+    </div>`;
+  }
+
+  else if(s.screen==='home-b'){
+    html=`<div class="screen visible">
+      <div class="stat-number">3,000</div>
+      <p class="label-upper">people said this quiz</p>
+      <h1>ended in divorce.</h1>
+      <p class="subtitle">Your partner already took this quiz.<br>Now it's your turn. Same questions, your answers.<br>No peeking.</p>
+      <button class="btn-accent" onclick="startQuizB()">Your turn</button>
     </div>`;
   }
 
@@ -193,7 +203,8 @@ function render(){
 }
 
 function startQuizA(){state={screen:'quiz-a',currentQ:0,answers:{},partnerAnswers:null,selectedOption:null};try{window.history.replaceState({},'',window.location.pathname);}catch(e){}render();}
-function goHome(){if(partnerFromURL){state.screen='quiz-b';state.currentQ=0;state.answers={};state.partnerAnswers=partnerFromURL;render();}else{state.screen='no-link';render();}}
+function startQuizB(){state.screen='quiz-b';state.currentQ=0;state.answers={};state.selectedOption=null;render();}
+function goHome(){if(partnerFromURL){state.screen='home-b';state.partnerAnswers=partnerFromURL;render();}else{state.screen='no-link';render();}}
 function goToHome(){state.screen='home';render();}
 function goBack(){if(state.currentQ>0){state.currentQ--;state.selectedOption=null;render();}}
 function selectAnswer(qid,oi){
@@ -217,7 +228,7 @@ function resetQuiz(){state={screen:'home',currentQ:0,answers:{},partnerAnswers:n
 async function shareLink(){
   const r=window._r;if(!r)return;
   const text=r.shareText+'\n'+SHARE_BASE_URL;
-  try{if(navigator.share){await navigator.share({title:'The Couples Quiz',text:r.shareText,url:SHARE_BASE_URL});return;}}catch(e){}
+  try{if(navigator.share){await navigator.share({text:text});return;}}catch(e){}
   const ok=await tryCopy(text);
   const b=document.querySelector('.btn-outline');
   if(b){b.textContent=ok?'Copied!':'Long-press the link to copy';setTimeout(()=>{b.textContent='Share your score';},2500);}
