@@ -219,7 +219,7 @@ async function tryCopy(text){
 }
 async function copyLink(){
   const url=getShareURL(state.answers);
-  try{if(navigator.share){await navigator.share({title:'The Couples Quiz',text:'Can we pass the test? Take the quiz.',url:url});return;}}catch(e){}
+  try{if(navigator.share){await navigator.share({url:url});return;}}catch(e){}
   const ok=await tryCopy(url);
   const b=document.querySelector('.btn-accent');
   if(b){b.textContent=ok?'Copied!':'Select the link above and copy';setTimeout(()=>{b.textContent='Copy link';},2500);}
