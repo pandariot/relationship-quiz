@@ -201,17 +201,26 @@ function selectAnswer(qid,oi){
   state.selectedOption=oi;state.answers[qid]=oi;render();
   setTimeout(()=>{state.selectedOption=null;if(state.currentQ<QUESTIONS.length-1){state.currentQ++;render();}else{if(state.screen==='quiz-a'){state.screen='share';render();}else if(state.screen==='quiz-b'){state.screen='results';try{window.history.replaceState({},'',window.location.pathname);}catch(e){}render();}}},400);
 }
-function fallbackCopy(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
-function copyLink(){
+async function tryCopy(text){
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(text);return true;}}catch(e){}
+  try{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.focus();ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);if(ok)return true;}catch(e){}
+  return false;
+}
+async function copyLink(){
   const url=getShareURL(state.answers);
-  if(navigator.share){navigator.share({title:'The Couples Quiz',text:'Can we pass the test? Take the quiz.',url:url}).catch(()=>{});}
-  else{fallbackCopy(url);const b=document.querySelector('.btn-accent');if(b){b.textContent='Copied!';setTimeout(()=>{b.textContent='Copy link';},2000);}}
+  try{if(navigator.share){await navigator.share({title:'The Couples Quiz',text:'Can we pass the test? Take the quiz.',url:url});return;}}catch(e){}
+  const ok=await tryCopy(url);
+  const b=document.querySelector('.btn-accent');
+  if(b){b.textContent=ok?'Copied!':'Select the link above and copy';setTimeout(()=>{b.textContent='Copy link';},2500);}
 }
 function resetQuiz(){state={screen:'home',currentQ:0,answers:{},partnerAnswers:null,selectedOption:null};try{window.history.replaceState({},'',window.location.pathname);}catch(e){}render();}
-function shareLink(){
+async function shareLink(){
   const r=window._r;if(!r)return;
-  if(navigator.share){navigator.share({title:'The Couples Quiz',text:r.shareText,url:SHARE_BASE_URL}).catch(()=>{});}
-  else{fallbackCopy(r.shareText+'\n'+SHARE_BASE_URL);const b=document.querySelector('.btn-outline');if(b){b.textContent='Copied!';setTimeout(()=>{b.textContent='Share your score';},2000);}}
+  const text=r.shareText+'\n'+SHARE_BASE_URL;
+  try{if(navigator.share){await navigator.share({title:'The Couples Quiz',text:r.shareText,url:SHARE_BASE_URL});return;}}catch(e){}
+  const ok=await tryCopy(text);
+  const b=document.querySelector('.btn-outline');
+  if(b){b.textContent=ok?'Copied!':'Long-press the link to copy';setTimeout(()=>{b.textContent='Share your score';},2500);}
 }
 
 function downloadResults(){
