@@ -151,7 +151,7 @@ function render(){
 
   else if(s.screen==='share'){
     const url=getShareURL(s.answers);
-    html=`<div class="screen visible"><div style="font-size:48px;margin-bottom:16px">✓</div><h2>Your answers are locked in.</h2><p class="body-text">Send this link to your partner. They'll answer the same questions from their own perspective. Neither of you will see what the other said until both are done.</p><div class="share-box"><div class="share-url">${url}</div></div><button class="btn-accent" onclick="copyLink()">Copy link</button><div style="height:8px"></div><button class="btn-ghost" onclick="resetQuiz()">Start over</button></div>`;
+    html=`<div class="screen visible"><div style="font-size:48px;margin-bottom:16px">✓</div><h2>Your answers are locked in.</h2><p class="body-text">Send this EXACT link to your partner. They'll answer the same questions from their own perspective. Neither of you will see what the other said until both are done.</p><div class="share-box"><div class="share-url">${url}</div></div><button class="btn-accent" onclick="copyLink()">Copy link</button><div style="height:8px"></div><button class="btn-ghost" onclick="resetQuiz()">Start over</button></div>`;
   }
 
   else if(s.screen==='results'){
